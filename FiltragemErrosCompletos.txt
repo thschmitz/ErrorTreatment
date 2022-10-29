@@ -1,0 +1,101 @@
+import java.util.*;
+import java.util.stream.*;
+import java.util.function.*; 
+import java.io.*;
+
+class Filtragem {
+	ArrayList<String> errosGerais = new ArrayList<String>();
+	ArrayList<Integer> listaRepeticoesNumeros = new ArrayList<Integer>();
+	ArrayList<String> listaRepeticoesErros = new ArrayList<String>();
+	ArrayList<Float> listaRepeticoesPorcentagem = new ArrayList<Float>();
+	ArrayList<String> listaFrases = new ArrayList<String>();
+  ArrayList<Integer> arrayIndex = new ArrayList<Integer>();
+
+	public ArrayList<Integer> getListaRepeticoesNumeros() {
+		return this.listaRepeticoesNumeros;
+	}
+
+	public ArrayList<String> getListaRepeticoesErros() {
+		return this.listaRepeticoesErros;
+	}
+
+	public ArrayList<String> filtrar(List<String> linhas) {
+
+		Cores colorir = new Cores();
+
+		String erro = "";
+
+		for (int i = 0; i < linhas.size(); i++) {
+			if (!linhas.get(i).contains(" 	at ")) {
+				if (linhas.get(i).contains(" ERROR ")) {
+          if (linhas.get(i).contains("com.system"))
+					// Exception
+					String linha = "";
+					int index = linhas.get(i).indexOf("Exception:");
+
+					if (index > -1) {
+						index += 9;
+						linha = linhas.get(i).substring(0, index);
+						String[] partes = linha.split("\\.");
+						erro = linha.split("\\.")[partes.length - 1];
+					} else if (linhas.get(i).contains(" [org.hibernate.proxy.pojo.BasicLazyInitializer] ")) {
+						erro = linhas.get(i).split(":")[4].split("\\.")[2];
+					}
+
+					this.errosGerais.add(erro);
+				}
+			}
+		}
+
+		dadosOcorrencias();
+		calcularResultado();
+
+	
+
+		for (int i = 0; i < listaRepeticoesErros.size(); i++) {
+			this.listaFrases.add(this.listaRepeticoesErros.get(i) + "  ---  " + this.listaRepeticoesNumeros.get(i) + "  ---  "
++ this.listaRepeticoesPorcentagem.get(i) + "%");
+		}
+
+		juntaDia();
+		
+		return this.listaFrases;
+
+		
+	}
+
+	
+
+	public void calcularResultado() {
+		for (int i = 0; i < this.listaRepeticoesErros.size(); i++) {
+			float porcento = (this.listaRepeticoesNumeros.get(i).floatValue() / ((float) this.errosGerais.size()) * 100f);
+
+			this.listaRepeticoesPorcentagem.add(porcento);
+		}
+	}
+
+	public void dadosOcorrencias() {
+		Set<String> distinct = new HashSet<>(this.errosGerais);
+		ArrayList<Integer> listaRepeticoes = new ArrayList<Integer>();
+
+		for (String s : distinct) {
+			int repeticoes = Collections.frequency(this.errosGerais, s);
+			this.listaRepeticoesErros.add(s);
+			this.listaRepeticoesNumeros.add(repeticoes);
+		}
+	}
+
+
+  public void juntaDia(){
+
+		Map<String, List<String>> test = this.errosGerais.stream().collect(Collectors.groupingBy(o -> o));
+
+		for(String key : test.keySet()){
+			// System.out.println(key);
+			// System.out.println(test.get(key).size());
+		}
+		
+
+
+  }
+}
