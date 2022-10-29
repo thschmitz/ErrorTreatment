@@ -60,7 +60,7 @@ public class MenuErroDiario{
 
 		Boolean continuar = true;
 		int opcaoUsuario;
-    while(continuar=true) {
+    while(continuar==true) {
 			System.out.println("Deseja modificar a ordem?");
 			System.out.println("1) Valor crescente: ");
 			System.out.println("2) Valor descrescente: ");
@@ -72,8 +72,7 @@ public class MenuErroDiario{
 
 			switch(opcaoUsuario) {
 				case 1:
-          // valorCrescente(nomesFinais, listaErros);
-          
+          valorCrescente(nomesFinais, listaErros);
 					break;
 				case 2:
 					valorDecrescente(nomesFinais, listaErros);
@@ -87,31 +86,56 @@ public class MenuErroDiario{
 				case 5:
 					continuar = false;
 					break;
+				default:
+					colorir.imprimirVermelho("Digite um valor valido!");
 			}
 			
 		}
   }
 
 	public void valorDecrescente(List<String> nomesFinais, ArrayList<Integer> listaErros){
-		Map<Integer, List<String>> mapValores = new HashMap<Integer, List<String>>();
+		TreeMap<Integer, List<String>> mapValores = new TreeMap<Integer, List<String>>();
 
 
 		for(int i = 0; i < listaErros.size(); i++) {
 			mapValores.computeIfAbsent(listaErros.get(i), o -> new ArrayList<String>()).add(nomesFinais.get(i));
 		}
 
-		for(Integer key : mapValores.keySet()){
-			
-			System.out.println(key);
-			System.out.println(mapValores.get(key));
+		String leftAlignFormat = "| %-15s | %-8d | %n";
 
+		System.out.format("+-----------------+--------------+%n");
+		System.out.format("|"+ "\u001B[31m"+ "     Data    "+"\u001B[0m"+ "   | "+ "\u001B[33m" +" Erros " + "\u001B[0m" + " |%n");
+		System.out.format("+-----------------+--------------+%n");
+
+		for(Integer key : mapValores.descendingKeySet()){
+			System.out.format(leftAlignFormat, mapValores.get(key).get(0), key);
 
 			
 		}
-			
+		System.out.format("+-----------------+--------------+%n");
+
+	}
+
+	public void valorCrescente(List<String> nomesFinais, ArrayList<Integer> listaErros) {
+			TreeMap<Integer, List<String>> mapValores = new TreeMap<Integer, List<String>>();
+
+
+		for(int i = 0; i < listaErros.size(); i++) {
+			mapValores.computeIfAbsent(listaErros.get(i), o -> new ArrayList<String>()).add(nomesFinais.get(i));
+		}
+		String leftAlignFormat = "| %-15s | %-8d | %n";
+
+		System.out.format("+-----------------+--------------+%n");
+		System.out.format("|"+ "\u001B[31m"+ "     Data    "+"\u001B[0m"+ "   | "+ "\u001B[33m" +" Erros " + "\u001B[0m" + " |%n");
+		System.out.format("+-----------------+--------------+%n");
+		
+		for(Integer key : mapValores.keySet()){
+			System.out.format(leftAlignFormat, mapValores.get(key).get(0), key);
+		}
 		
 
-		
+
+		System.out.format("+-----------------+--------------+%n");
 	}
 
 
@@ -123,6 +147,7 @@ public class MenuErroDiario{
 			System.out.format("+-----------------+--------------+%n");
 			for(int i = 0; i < listaErros.size(); i++) {
 				System.out.format(leftAlignFormat, nomesFinais.get(i), listaErros.get(i));
+				
 			}
 			System.out.format("+-----------------+--------------+%n");
 	}

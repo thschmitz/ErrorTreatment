@@ -41,7 +41,7 @@ public class MenuQtdErrosDiario{
 		String leftAlignFormat = "| %-70s | %-15s | %-10s | %n";
 
 		System.out.format("+------------------------------------------------------------------------+------------------------------+%n");
-		System.out.format("|"+ "\u001B[31m"+ "                                   Erros                                 "+"\u001B[0m"+ "| "+ "\u001B[33m" +"  Ocorrencias   " + "\u001B[0m" + "|" + "\u001B[32m" + "      %%     "+"\u001B[0m" + "|%n");
+		System.out.format("|"+ "\u001B[31m"+ "                                   Erros                                "+"\u001B[0m"+ "| "+ "\u001B[33m" +"  Ocorrencias   " + "\u001B[0m" + "|" + "\u001B[32m" + "      %%     "+"\u001B[0m" + "|%n");
 		System.out.format("+------------------------------------------------------------------------+------------------------------+%n");
 
 		for (int i = 0; i < listaFrases.size(); i++) {
